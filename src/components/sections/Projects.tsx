@@ -99,14 +99,43 @@ const Projects = () => {
                 <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
                   <div className="absolute inset-0 flex items-center justify-center gap-3">
-                    <button className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110">
-                      <ExternalLink className="h-4 w-4" />
-                    </button>
-                    <button className="magnetic flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 transition-transform hover:scale-110">
-                      <Github className="h-4 w-4" />
-                    </button>
+                    {p.liveUrl ? (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Ver ${p.title} en vivo`}
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.6)] transition-transform hover:scale-110"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label="Vista previa"
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </button>
+                    )}
+                    {p.repoUrl && (
+                      <a
+                        href={p.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Repositorio de ${p.title}`}
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 transition-transform hover:scale-110"
+                      >
+                        <Github className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
+                {p.featured && (
+                  <div className="absolute left-3 top-3 z-10 rounded-full border border-secondary/40 bg-background/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-secondary backdrop-blur-md">
+                    En vivo
+                  </div>
+                )}
               </div>
 
               <div className="p-5">
