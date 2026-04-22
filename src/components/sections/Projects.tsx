@@ -1,13 +1,26 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 
-const projects = [
+type Project = {
+  title: string;
+  category: string;
+  description: string;
+  tags: string[];
+  gradient: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  featured?: boolean;
+};
+
+const projects: Project[] = [
   {
     title: "Variedades Nora",
     category: "E-commerce / Catálogo",
-    description: "Tienda online con catálogo dinámico, carrito y diseño responsive enfocado en conversión.",
+    description: "Tienda online real con catálogo dinámico, carrito y diseño responsive enfocado en conversión. Proyecto entregado y en producción.",
     tags: ["React", "Tailwind", "WhatsApp API"],
     gradient: "from-primary/40 via-secondary/30 to-accent/40",
+    liveUrl: "https://variedades-nora-hub-gdio.vercel.app/",
+    featured: true,
   },
   {
     title: "Landing Premium SaaS",
@@ -86,14 +99,43 @@ const Projects = () => {
                 <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
                   <div className="absolute inset-0 flex items-center justify-center gap-3">
-                    <button className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110">
-                      <ExternalLink className="h-4 w-4" />
-                    </button>
-                    <button className="magnetic flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 transition-transform hover:scale-110">
-                      <Github className="h-4 w-4" />
-                    </button>
+                    {p.liveUrl ? (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Ver ${p.title} en vivo`}
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.6)] transition-transform hover:scale-110"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label="Vista previa"
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </button>
+                    )}
+                    {p.repoUrl && (
+                      <a
+                        href={p.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Repositorio de ${p.title}`}
+                        className="magnetic flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 transition-transform hover:scale-110"
+                      >
+                        <Github className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
+                {p.featured && (
+                  <div className="absolute left-3 top-3 z-10 rounded-full border border-secondary/40 bg-background/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-secondary backdrop-blur-md">
+                    En vivo
+                  </div>
+                )}
               </div>
 
               <div className="p-5">
@@ -104,7 +146,7 @@ const Projects = () => {
                   {p.title}
                 </h3>
                 <p className="mb-4 text-sm text-muted-foreground">{p.description}</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="mb-4 flex flex-wrap gap-2">
                   {p.tags.map((t) => (
                     <span
                       key={t}
@@ -114,6 +156,17 @@ const Projects = () => {
                     </span>
                   ))}
                 </div>
+                {p.liveUrl && (
+                  <a
+                    href={p.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="magnetic inline-flex items-center gap-1.5 text-xs font-semibold text-secondary transition-colors hover:text-primary-glow"
+                  >
+                    Visitar sitio en vivo
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
               </div>
             </motion.article>
           ))}
