@@ -1,13 +1,26 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 
-const projects = [
+type Project = {
+  title: string;
+  category: string;
+  description: string;
+  tags: string[];
+  gradient: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  featured?: boolean;
+};
+
+const projects: Project[] = [
   {
     title: "Variedades Nora",
     category: "E-commerce / Catálogo",
-    description: "Tienda online con catálogo dinámico, carrito y diseño responsive enfocado en conversión.",
+    description: "Tienda online real con catálogo dinámico, carrito y diseño responsive enfocado en conversión. Proyecto entregado y en producción.",
     tags: ["React", "Tailwind", "WhatsApp API"],
     gradient: "from-primary/40 via-secondary/30 to-accent/40",
+    liveUrl: "https://variedades-nora-hub-gdio.vercel.app/",
+    featured: true,
   },
   {
     title: "Landing Premium SaaS",
