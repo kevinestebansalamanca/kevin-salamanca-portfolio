@@ -146,7 +146,7 @@ const Projects = () => {
                   {p.title}
                 </h3>
                 <p className="mb-4 text-sm text-muted-foreground">{p.description}</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="mb-4 flex flex-wrap gap-2">
                   {p.tags.map((t) => (
                     <span
                       key={t}
@@ -156,6 +156,17 @@ const Projects = () => {
                     </span>
                   ))}
                 </div>
+                {p.liveUrl && (
+                  <a
+                    href={p.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="magnetic inline-flex items-center gap-1.5 text-xs font-semibold text-secondary transition-colors hover:text-primary-glow"
+                  >
+                    Visitar sitio en vivo
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
               </div>
             </motion.article>
           ))}
