@@ -140,7 +140,7 @@ const Contact = () => {
 
             {[
               { icon: Phone, label: "Teléfono", value: "+57 312 405 0409", href: "tel:+573124050409" },
-              { icon: Mail, label: "Email", value: "kevin@ksnova.studio", href: "mailto:kevin@ksnova.studio" },
+              { icon: Mail, label: "Email", value: "kevinestebansalamanca2@gmail.com", href: "mailto:kevinestebansalamanca2@gmail.com" },
               { icon: MapPin, label: "Ubicación", value: "Yopal · Casanare\nVereda La Niata" },
             ].map((c) => {
               const Inner = (
