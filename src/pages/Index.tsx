@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
+import LazySection from "@/components/LazySection";
 
 const ParticlesBackground = lazy(() => import("@/components/ParticlesBackground"));
 const CustomCursor = lazy(() => import("@/components/CustomCursor"));
@@ -15,8 +16,8 @@ const Contact = lazy(() => import("@/components/sections/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
 const Index = () => {
-  const [hydrated, setHydrated] = useState(false);
   const [enableEffects, setEnableEffects] = useState(false);
+  const [enableRobot, setEnableRobot] = useState(false);
 
   useEffect(() => {
     document.title = "KS Nova Studio · Kevin Salamanca · Desarrollador Web";
@@ -29,27 +30,38 @@ const Index = () => {
     );
     if (!meta.parentNode) document.head.appendChild(meta);
 
-    // Defer hydration of below-the-fold content until idle
     const idle =
       (window as any).requestIdleCallback ||
-      ((cb: () => void) => setTimeout(cb, 200));
-    const id = idle(() => setHydrated(true));
+      ((cb: () => void) => setTimeout(cb, 300));
 
-    // Enable heavy visual effects only on capable, non-mobile devices
     const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const wide = window.innerWidth >= 1024;
-    if (isFinePointer && wide && !reducedMotion) {
-      const id2 = idle(() => setEnableEffects(true));
-      return () => {
-        if ((window as any).cancelIdleCallback) {
-          (window as any).cancelIdleCallback(id);
-          (window as any).cancelIdleCallback(id2);
-        }
-      };
+    const isDesktop = isFinePointer && wide && !reducedMotion;
+
+    let id1: any, id2: any;
+    if (isDesktop) {
+      // Heavy visual effects: desktop only
+      id1 = idle(() => setEnableEffects(true));
+      // Robot: desktop only on initial load to keep mobile JS minimal
+      id2 = idle(() => setEnableRobot(true));
+    } else {
+      // Mobile: load robot much later, only after main content is settled
+      id2 = setTimeout(() => setEnableRobot(true), 4000);
     }
+
     return () => {
-      if ((window as any).cancelIdleCallback) (window as any).cancelIdleCallback(id);
+      if ((window as any).cancelIdleCallback) {
+        if (id1) (window as any).cancelIdleCallback(id1);
+        if (id2 && typeof id2 === "number") {
+          // could be a timeout id on mobile; clear both safely
+          clearTimeout(id2);
+          (window as any).cancelIdleCallback?.(id2);
+        }
+      } else {
+        if (id1) clearTimeout(id1);
+        if (id2) clearTimeout(id2);
+      }
     };
   }, []);
 
@@ -64,21 +76,17 @@ const Index = () => {
       <Navbar />
       <main className="relative z-10">
         <Hero />
-        {hydrated && (
-          <Suspense fallback={null}>
-            <About />
-            <Skills />
-            <Projects />
-            <Services />
-            <Testimonials />
-            <CTA />
-            <Contact />
-          </Suspense>
-        )}
+        <LazySection minHeight={500}><About /></LazySection>
+        <LazySection minHeight={600}><Skills /></LazySection>
+        <LazySection minHeight={700}><Projects /></LazySection>
+        <LazySection minHeight={600}><Services /></LazySection>
+        <LazySection minHeight={500}><Testimonials /></LazySection>
+        <LazySection minHeight={300}><CTA /></LazySection>
+        <LazySection minHeight={500}><Contact /></LazySection>
+        <LazySection minHeight={200}><Footer /></LazySection>
       </main>
-      {hydrated && (
+      {enableRobot && (
         <Suspense fallback={null}>
-          <Footer />
           <RobotAssistant />
         </Suspense>
       )}
