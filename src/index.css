@@ -88,8 +88,8 @@
     }
   }
 
-  /* Hide default cursor on desktop for custom cursor */
-  @media (hover: hover) and (pointer: fine) {
+  /* Custom cursor only on wide desktop screens */
+  @media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
     body, a, button, [role="button"] {
       cursor: none;
     }
